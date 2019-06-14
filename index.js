@@ -71,8 +71,14 @@ function cossFSA_balCalcV2() {
                    Browser.Buttons.OK);
     return errr;
   };
+  
+    //Handle execption and errors
+  for (var i= 0; i < db.cGko.ids.length; i++) {
+      //Civic token instead of cavlvarycoin.
+    if( db.cGko.ids[i][1] == "From: CVC") db.cGko.ids[i][0] = "civic";
+  };
 
-  //3. Extract data from sources
+  //2. Extract data from sources
     // Base currency data
   var baseGeckoId = srchByCmpr("symbol", "id", db.baseCurr, geckoList, db.fiatsStables);
   db.baseCurr_stats = [cgkoExtV1(baseGeckoId[0][0], db.baseCurr, db.fiatConv)];
@@ -96,7 +102,7 @@ function cossFSA_balCalcV2() {
     db.cGko.rec.push(r1);
   };
 
-  //4. Clean and concatenate filtered/sorted data into final result array
+  //3. Clean and concatenate filtered/sorted data into final result array
   var ar1 = arCleaner(db.coss.rec);
   var ar2 = arCleaner(db.cGko.rec);
 
@@ -121,7 +127,7 @@ function cossFSA_balCalcV2() {
     }
   };
 
-  //5. Refresh range position, verify data sizes and send data to spreadsheet.
+  //4. Refresh range position, verify data sizes and send data to spreadsheet.
   var baseCRec = sht03.getRange("sufix_base_curr_rec").getValue().toString();
   dataRec = sht03.getRange("sufix_dt_rec").getValue().toString(); //refresh range size
 
