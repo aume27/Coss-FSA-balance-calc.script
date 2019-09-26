@@ -71,21 +71,26 @@ function cossFSA_balCalcV2() {
                    Browser.Buttons.OK);
     return errr;
   };
-  
+
     //Handle execption and errors
+  // [SYMBOL, id]... unav result in skip request
+  var exCoin = [["CVC", "civic"],["CELT", unav] ,["COSS", unav], ["LALA", unav], ["COS", "coss"]
+               ];
+
   for (var i= 0; i < db.cGko.ids.length; i++) {
-      //Civic token instead of cavlvarycoin.
-    if( db.cGko.ids[i][1] == "From: CVC") db.cGko.ids[i][0] = "civic";
+    for (var a = 0 ; a < exCoin.length; a++) {
+      if( db.cGko.ids[i][1] == "From: "+ exCoin[a][0]) db.cGko.ids[i][0] = exCoin[a][1];
+    };
   };
 
   //2. Extract data from sources
     // Base currency data
   var baseGeckoId = srchByCmpr("symbol", "id", db.baseCurr, geckoList, db.fiatsStables);
   db.baseCurr_stats = [cgkoExtV1(baseGeckoId[0][0], db.baseCurr, db.fiatConv)];
-  
+
     //Coss data
   db.coss.rec = AFmarketPrices(db.tracked, db.baseCurr, db.fiatsStables);
-  
+
     //Get coingecko.com data
   for (var c = 0; c < dtLen; c++ ) {
     var r1;
@@ -116,10 +121,10 @@ function cossFSA_balCalcV2() {
     return errr;
   };
   var finAr = addColumnsToArray(ar1, ar2);
-  
+
     //Check the size: if (data_records rows < data length) insertRow.
   var dataRec = sht03.getRange("sufix_dt_rec").getValue().toString();
-  
+
   var missingRows = (dtLen - sht01.getRange(dataRec).getNumRows());
   if(missingRows > 0) {
     for (var i = 0; i < missingRows; i++) {
